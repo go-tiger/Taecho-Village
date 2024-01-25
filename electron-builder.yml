@@ -1,6 +1,6 @@
 appId: 'TaechoVillage'
-productName: 'Taecho-Village'
-artifactName: '${productName}-setup-${version}.${ext}'
+productName: '태초마을'
+artifactName: 'Taecho-Village-setup-${version}.${ext}'
 
 copyright: 'Copyright © 2024 gotiger'
 

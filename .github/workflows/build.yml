@@ -19,6 +19,8 @@ jobs:
                   config-name: 'release-drafter-config.yml'
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        outputs:
+            release_id: ${{ steps.release-drafter.outputs.id }}
 
     release:
         needs: release_draft
@@ -60,3 +62,18 @@ jobs:
                     export CSC_KEY_PASSWORD=$CSC_KEY_PASSWORD
                     npm run dist
               shell: bash
+
+            - name: Publish Release
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const release_id = ${{ needs.release_draft.outputs.release_id }};
+                      if (release_id) {
+                        await github.rest.repos.updateRelease({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          release_id: release_id,
+                          draft: false
+                        });
+                      }
